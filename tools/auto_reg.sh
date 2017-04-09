@@ -1,10 +1,10 @@
 #!/bin/bash
 
-IPADDR="192.168.175.202"
+IPADDR="192.168.0.155"
 HAAS_PATH="haas"
 
 URL="http://$IPADDR/$HAAS_PATH/create.cgi"
-TYPE="ansible-2"
+TYPE="ansible-1"
 
 for USER in `cat users.txt`
   do

@@ -36,11 +36,6 @@ my $dts = $strp->parse_datetime($list[1]);
 # Start time - Delete time
 my $dur = $dts->delta_ms($now);
 
-# Check HTTP
-my $status = check_http($host,$list[3]);
-# Logging
-logging($id,@list,$status,$now,$dur->in_units('minutes'),$logfile);
-
 # K/V Delete 
 delete $h{$id};
 

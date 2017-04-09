@@ -65,42 +65,6 @@ print <<FOOTER;
 FOOTER
 }
 
-### Usage Output
-sub usage{
-
-print <<USAGE;
-	<h3>お知らせ</h3><p>
-	<b>XXXX年X月X日</b>・・・お知らせ
-	<h3>利用方法</h3>
-	<p>
-	<font color="red">こちらを良く読んでから実施してください。</font>
-	<ol id="list">
-	<li><b>ハンズオンの種類を選択</b>します</li>
-	<li>「ハンズオンビルド」ボタンを押すと、ハンズオンの環境が作られます</li>
-	<li>ハンズオンの環境の情報を元にブラウザでアクセスし実施します</li>
-	</ol>
-
-	<h4>前提および、保持スキル</h4>
-	<ul id="list">
-	<li>Ansible、Serverspecの基本的な知識を保持</li>
-	<li>Unix/Linuxオペレーション1年以上の経験、またはLPIC Level 1 同等以上の知識を保持</li>
-	<li>viによるファイル編集、基本的なUnix/Linuxオペレーションが可能</li>
-	</ul>
-
-	<h4>必要なもの</h4>
-	<ul id="list">
-	<li>WiFiでインターネットアクセスが可能なPC、タブレットなど</li>
-	<li>ブラウザ（Internet Explorer or Chrome で動作確認済み）</li>
-	</ul>
-
-	<h4>注意と制限</h4>
-	<ul id="list">
-	<li>ハンズオンの環境は手動で「終了」しない場合、<font color=red><b>60分</b></font>で自動的に削除</li>
-	<li><font color=red>10人</font>までが同時に本サービスを利用可能</li>
-	</ul>
-USAGE
-}
-
 ### Howto&Help
 sub howto{
 
@@ -133,7 +97,7 @@ sub handsref{
 	my $str = get_value($type);
 
 print <<START;
-        <h3>Informations of "$name"</h3>
+        <h3>Informations of <font color="red">"$name"</font></h3>
         <p>
         <ul id="list">
         <li><a href="http://$hostaddr/$str->{'file'}" target="_blank">Hands-on Text - $str->{'name'} </a></li>
@@ -240,22 +204,6 @@ sub userlist{
 	}		
 }
 
-### Logging
-sub logging{
-	my @list = @_;
-
-        open(W,">>$list[-1]");
-	for($i=0; $i <= $#list-1; $i++){
-		if($i == $#list-1){
-			print W "$list[$i]\n";
-		}else{
-			print W "$list[$i],";
-		}
-	}
-        close(W);
-
-}
-
 ### Error Page
 sub error_page{
 	
@@ -303,46 +251,6 @@ sub get_value{
 
         return $yaml->{$para};
 }
-
-# Socket & Connect
-sub check_http{
-
-        my $ip = shift;
-        my $port = shift;
-        $remote = IO::Socket::INET->new( Proto => "tcp",
-        PeerAddr => "$ip",
-        PeerPort => "$port"
-        );
-
-        unless($remote){
-                return (0);
-        }
-        $remote->autoflush(1);
-
-        #print $remote "GET /wordpress/wp-admin/install.php \n\n";
-        print $remote "HEAD /wordpress/wp-admin/install.php \n\n";
-
-        $f=<$remote>;
-        close $remote;
-
-        if($f =~ /DOCTYPE\sHTML/){
-                #print "HTTP OK\n";
-                return (1)
-
-        }else{
-                return (0)
-        }
-
-}
-
-sub uniq_func{
-	my @src = @_;
-	my %hash;
-
-	@hash{@src} = ();
-	return keys %hash;
-}
-
 
 
 1;
