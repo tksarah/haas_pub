@@ -1,0 +1,28 @@
+# Parameters for Ansible and CGI
+hostaddr: "HOSTADDR"
+pathname: "PATHNAME"
+playhome: "/var/www/haas_pub"
+timer: "off"
+limit: 600
+
+# Parameters for Ansible
+web_console: "true"
+inventory: "hosts"
+playbook: "site.yml"
+
+# Parameters for CGI
+max_emp: 999 
+dbfilename: "./data/db.dat"
+logfile: "./data/haas.log"
+ansible-1:
+  lesson: "Ansible初級"
+  name: "Ansible初級ハンズオンテキスト"
+  file: "Ansible_Lesson1_webconsole_pub.pdf"
+ansible-2:
+  lesson: "Ansible中級"
+  name: "Ansible中級ハンズオンテキスト"
+  file: "Ansible_Lesson2_webconsole_pub.pdf"
+serverspec-1:
+  lesson: "Serverspec初級"
+  name: "Serverspec初級ハンズオンテキスト"
+  file: "Serverspec_Lesson1_webconsole_pub.pdf"

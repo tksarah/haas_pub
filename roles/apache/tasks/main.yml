@@ -1,0 +1,5 @@
+- name: Install htttpd
+  yum: name=httpd state=latest
+
+- name: Start httpd
+  service: name=httpd state=started enabled=yes

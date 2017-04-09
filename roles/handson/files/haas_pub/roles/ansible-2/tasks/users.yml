@@ -1,0 +1,39 @@
+- block:
+    - name: boot ansible target container
+      docker_container:
+        name: "{{ user }}_l2_target"
+        image: "tksarah/lesson_ansible_target_pkged"
+        detach: true
+        state: started
+        ports:
+          - "{{ port }}:80"
+
+    - name: boot ansible host container
+      docker_container:
+        name: "{{ user }}_l2_host"
+        image: "tksarah/lesson2_ansible_host"
+        detach: true
+        state: started
+        links:
+          - "{{ user }}_l2_target:web"
+
+- block:
+    - name: Run containers for web console
+      docker_container:
+        name: "{{ user }}_wetty"
+        image: "tksarah/lesson_wetty"
+        detach: true
+        state: started
+        ports:
+          - "{{ htty }}:{{ htty }}"
+          - "{{ ttty }}:{{ ttty }}"
+        links:
+          - "{{ user }}_l2_host:ansible_host"
+          - "{{ user }}_l2_target:ansible_target"
+        env:
+          HTTY: "{{ htty }}"
+          TTTY: "{{ ttty }}"
+        tty: true
+
+  when: web_console
+

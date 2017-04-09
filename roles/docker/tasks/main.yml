@@ -1,0 +1,22 @@
+- name: Copy docker repo
+  copy: src=files/docker.repo dest=/etc/yum.repos.d/docker.repo owner=root group=root mode=0644
+
+- name: Install Pip package
+  yum: name=python-pip state=latest
+- name: Install Docker package
+  yum: name="docker-engine-{{ version }}" state=present
+
+- name: Install docker-py
+  pip: name=docker-py
+
+- name: Start and Enable and services
+  service: name=docker state=started enabled=yes
+
+- block:
+  - debug: msg="{{ environment }}"
+  - debug: msg="{{ proxy_env.http_proxy }}"
+  - name: Edit docker configuration file
+    ini_file: dest=/usr/lib/systemd/system/docker.service section=Service option=Environment value="\"HTTP_PROXY={{ proxy_env.http_proxy }}\"" mode=0644 backup=yes
+  - name: Daemon Reload for docker
+    systemd: name=docker daemon_reload=yes state=restarted
+  when: proxy_env.http_proxy is defined

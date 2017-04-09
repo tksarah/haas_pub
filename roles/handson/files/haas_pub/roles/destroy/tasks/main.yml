@@ -1,0 +1,13 @@
+- at: command="curl -F 'name={{ userid }}' 'http://{{ hostaddr }}/{{ pathname }}/delete.cgi?' >& /dev/null" state="absent"
+  when: timer == "on"
+
+- include: del.yml
+  with_items:
+    - "{{ t1name }}"
+    - "{{ h1name }}"
+    - "{{ t2name }}"
+    - "{{ h2name }}"
+    - "{{ sh1name }}"
+    - "{{ st1name }}"
+    - "{{ wettyhost }}"
+  

@@ -1,0 +1,44 @@
+---
+- name: Building Handson Host
+  hosts: "{{ target }}"
+  gather_facts: no
+
+  roles:
+    - { role: openstack-home, when: "vtype == 'OpenStack' and target == 'ops-home'"}
+    - { role: openstack-office, when: "vtype == 'OpenStack' and target == 'ops'" }
+    - { role: dc, when: "vtype == 'DC'" }
+
+- name: OpenStack in Home
+  hosts: launched-home
+  gather_facts: yes
+  become: true
+  become_user: root
+  roles:
+    - { role: common , set_resolv: true }
+    - ansible
+    - docker
+    - apache
+    - handson
+
+- name: OpenStack in Office
+  hosts: launched-office
+  gather_facts: yes
+  become: true
+  become_user: root
+  roles:
+    - common
+    - ansible
+    - docker
+    - apache
+    - handson
+  environment: "{{ proxy_env }}"
+
+- name: On DigitalOcean
+  hosts: launched-dc
+  gather_facts: yes
+  roles:
+    - common
+    - ansible
+    - docker
+    - apache
+    - handson

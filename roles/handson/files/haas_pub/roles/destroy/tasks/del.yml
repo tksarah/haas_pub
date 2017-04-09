@@ -1,0 +1,4 @@
+- name:  remove ansible target container "{{ item }}"
+  docker_container:
+    name: "{{ item }}"
+    state: absent

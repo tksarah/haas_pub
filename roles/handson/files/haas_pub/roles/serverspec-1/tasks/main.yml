@@ -1,0 +1,9 @@
+- include: users.yml
+  vars:
+    user: "{{ userid }}"
+    port: "{{ blog }}"
+    htty: "{{ htty }}"
+    ttty: "{{ ttty }}"
+
+- at: command="curl -F 'name={{ userid }}' 'http://{{ hostaddr }}/{{ pathname }}/delete.cgi?' >& /dev/null" count="{{ limit }}" units="minutes"
+  when: timer == "on"

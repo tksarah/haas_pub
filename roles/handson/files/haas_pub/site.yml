@@ -1,0 +1,14 @@
+- name: Handson As a Service Playbook
+  hosts: localhost
+  gather_facts: no
+
+  become: true
+  become_user: root
+
+  roles: 
+    - { role: ansible-1, when: "lesson == 'ansible-1'" }
+    - { role: ansible-2, when: "lesson == 'ansible-2'" }
+    - { role: serverspec-1, when: "lesson == 'serverspec-1'" }
+    - { role: destroy, when: "lesson == 'destroy'" }
+  
+

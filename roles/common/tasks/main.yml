@@ -1,0 +1,26 @@
+- name: Disable SELinux
+  selinux: state=disabled
+
+- name: Copy resolv.conf
+  template: src=resolv.conf.j2 dest=/etc/resolv.conf
+  when: set_resolv
+
+- name: Set timezone Asia/Tokyo
+  timezone: name=Asia/Tokyo
+
+- block:
+    - name: Install EPEL-Package
+      yum: name=epel-release state=present
+
+    - name: Install Packages
+      yum: name={{ item }} state=latest
+      with_items:
+        - git
+        - libselinux-python
+
+    - name: Stop and Disabled services
+      service: name={{ item }} state=stopped enabled=no
+      with_items:
+        - postfix
+        - wpa_supplicant
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"

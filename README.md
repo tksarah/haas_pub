@@ -1,0 +1,39 @@
+# Hands-on as a Service
+
+## Decryption
+ 
+## Requirement 
+
+* ansible 2.2.0 
+* dopy 0.3.5 (0.3.7 is broken , at 2017/1/14)
+
+## Preparation
+
+**Edit : roles/apache/vars/main.yml**
+
+This is http://＜ server address ＞/＜ web_alias ＞/ .
+
+```
+web_alias: "haas"
+```
+
+## Options Variables
+
+**roles/handson/vars/main.yml**
+
+```
+download_contents: false   # If you want to download after this play finised , it's true. (default:false) 
+digest: false              # When you use Digest Authorication , it's true. (default:false)
+```
+
+
+## For OpenStack 
+```
+ansible-playbook -i hosts -e " target=ops-home vtype=OpenStack hname=hoge" site.yml
+```
+
+## For DigitalOcean
+
+```
+ansible-playbook -i hosts -e " target=dc vtype=DC hname=hoge" site.yml
+```

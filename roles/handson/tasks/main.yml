@@ -1,0 +1,65 @@
+- name: Put Contents
+  copy: src=haas_pub/ dest="{{ contents_path }}" 
+
+- name: Put Hands-on Text
+  copy: src={{ item }} dest=/var/www/html/ owner=apache group=apache mode=600
+  with_fileglob:
+    - pdf/*.pdf
+
+- name: Set Web Path
+  replace: dest="{{ contents_path }}/host_vars/localhost" regexp='PATHNAME' replace="{{ web_alias }}"
+
+- name: Set Host IP
+  replace: dest="{{ contents_path }}/host_vars/localhost" regexp='HOSTADDR' replace="{{ inventory_hostname }}"
+
+- name: Change owner
+  file: path="{{ contents_path }}" owner=apache group=apache recurse=yes state=directory
+
+- name: Copy CSS on local
+  copy: src="{{ contents_path }}/default.css" dest=/var/www/html/default.css remote_src=true owner=apache group=apache
+
+- block: 
+    - name: Find *.cgi
+      find: paths="{{ contents_path }}" patterns="*.cgi"
+      register: sh_list
+    - name: Change mode for *.cgi
+      file: path="{{ item.path }}" mode=755
+      with_items:
+        - '{{ sh_list.files }}'
+
+- block:
+    - name: Copy digest auth password file
+      copy: src=htpasswd dest=/etc/httpd/.htpasswd owner=root group=root mode=644
+    - name: Copy httpd.conf for Digest
+      template: src=httpd.conf.digest.j2 dest=/etc/httpd/conf/httpd.conf mode=644 owner=root group=root backup=yes
+      notify:
+        - Apache_restart
+  when: digest
+
+- name: Copy httpd.conf
+  template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf mode=644 owner=root group=root backup=yes
+  notify:
+    - Apache_restart
+  when: not digest
+  
+- name: Install Perl modules
+  yum: name={{ item }} state=latest
+  with_items:
+    - perl-BerkeleyDB
+    - perl-CGI
+    - perl-DateTime-Format-Strptime
+    - perl-DateTime
+    - perl-YAML-Tiny
+    - perl-Data-Dumper
+
+- name: Add lines for /etc/sudoers
+  blockinfile:
+    dest: /etc/sudoers
+    block: |
+      %apache ALL=(ALL) NOPASSWD: ALL
+      Defaults:apache !requiretty
+
+- name: Pull handson container images
+  docker_image: name="{{ item }}"
+  with_items: "{{ container_images }}"
+  when: download

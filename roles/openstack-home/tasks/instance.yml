@@ -1,0 +1,29 @@
+- name: Boot Instance
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ url }}"
+      username: "{{ myuser }}"
+      password: "{{ mypass }}"
+      project_name: "{{ tenant }}"
+    name: "{{ hname }}"
+    image: "{{ image }}"
+    key_name: "{{ seckey }}"
+    timeout: 200
+    flavor: "{{ flavor }}"
+    nics:
+      - net-id: "{{ net_id }}"
+    auto_ip: yes
+
+- name: Get Fact
+  tags: fact
+  os_server_facts:
+    auth:
+      auth_url: "{{ url }}"
+      username: "{{ myuser }}"
+      password: "{{ mypass }}"
+      project_name: "{{ tenant }}"
+    server: "{{ hname }}"
+
+- add_host: name={{ openstack_servers[0].accessIPv4 }} groupname=launched-home
+- wait_for: delay=60 path=/etc/hosts timeout=360 host="{{ openstack_servers[0].accessIPv4 }}" state=started
