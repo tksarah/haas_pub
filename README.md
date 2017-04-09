@@ -4,7 +4,7 @@
  
 ## Requirement 
 
-* ansible 2.2.0 
+* ansible 2.3.0 
 * docker 1.11.2
 * dopy 0.3.5 (0.3.7 is broken , at 2017/1/14)
 
@@ -30,11 +30,11 @@ digest: false              # When you use Digest Authorication , it's true. (def
 
 ## For OpenStack (Test)
 ```
-ansible-playbook -i hosts -e " target=ops-home vtype=OpenStack hname=hoge" site.yml
+ansible-playbook -i hosts -e "target=ops-home vtype=OpenStack hname=hoge" site.yml
 ```
 
 ## For DigitalOcean (Cloud)
 
 ```
-ansible-playbook -i hosts -e " target=dc vtype=DC hname=hoge" site.yml
+ansible-playbook -i hosts -e "target=dc vtype=DC hname=hoge" site.yml
 ```

@@ -28,10 +28,13 @@
   register: my_droplet
   run_once: true
 
-- add_host: name={{ my_droplet.droplet.ip_address }} groupname=launched-dc
+- name: Add host
+  add_host: name={{ my_droplet.droplet.ip_address }} groupname=launched-dc
 
 - debug: msg="ID is {{ my_droplet.droplet.id }}"
 - debug: msg="IP is {{ my_droplet.droplet.ip_address }}"
 
-- name: Wait for SSH to come up
+- name: Wait for Connection
   wait_for: host={{ my_droplet.droplet.ip_address }} port=22 delay=30 timeout=360 state=started
+  # form v2.3
+  #wait_for_connection:

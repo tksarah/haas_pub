@@ -19,4 +19,4 @@
     ini_file: dest=/usr/lib/systemd/system/docker.service section=Service option=Environment value="\"HTTP_PROXY={{ proxy_env.http_proxy }}\"" mode=0644 backup=yes
   - name: Daemon Reload for docker
     systemd: name=docker daemon_reload=yes state=restarted
-  when: proxy_env.http_proxy is defined
+  when: proxy_env.http_proxy != ""

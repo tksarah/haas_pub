@@ -26,5 +26,10 @@
       project_name: "{{ tenant }}"
     server: "{{ hname }}"
 
-- add_host: name={{ openstack_servers[0].accessIPv4 }} groupname=launched-office
-- wait_for: delay=60 path=/etc/hosts timeout=360 host="{{ openstack_servers[0].accessIPv4 }}" state=started
+- name: Add host
+  add_host: name={{ openstack_servers[0].accessIPv4 }} groupname=launched-office
+
+- name: Wait for Connection
+  wait_for: delay=60 path=/etc/hosts timeout=360 host="{{ openstack_servers[0].accessIPv4 }}" state=started
+  # form v2.3
+  #wait_for_connection:
