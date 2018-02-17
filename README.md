@@ -24,8 +24,8 @@ web_alias: "haas"
 **roles/handson/vars/main.yml**
 
 ```
-download: true             # If you want to download after this play finised , it's true. (default:false) 
-digest: false              # When you use Digest Authorication , it's true. (default:false)
+download: true             # If you want to download after this play finised , it's true. (default: false) 
+digest: false              # When you use Digest Authorication , it's true. (default: false)
 ```
 
 
